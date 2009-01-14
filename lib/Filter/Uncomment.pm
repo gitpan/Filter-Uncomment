@@ -8,16 +8,12 @@ BEGIN
 {
 use vars qw ($VERSION @EXPORT_OK %EXPORT_TAGS);
 
-$VERSION     = 0.01;
+$VERSION     = '0.03';
 @EXPORT_OK   = qw ();
 %EXPORT_TAGS = ();
 }
 
 #-------------------------------------------------------------------------------
-
-#~ use Time::HiRes ;
-#~ use Carp qw(carp confess cluck);
-#~ use Data::TreeDumper ;
 
 use English qw( -no_match_vars ) ;
 
@@ -163,7 +159,7 @@ if(defined $argument_type)
 	{
 	$setup = undef ;
 
-	if($argument_type =~ /^GROUPS$/xm)
+	if($argument_type =~ /^GROUPS$/sxm)
 		{
 		unless(defined $argument_value && 'HASH' eq ref $argument_value)
 			{
@@ -204,12 +200,13 @@ if($setup)
 	{
 	my $coumpound_regex 
 		= join q[|], 
-			map {s{\ }{\\\ }xgm ; $_ ;}                   # so we can use x option for regex
+			map {s{\ }{\\\ }sxgm ; $_ ;}                  # so we can use x option for regex
 				map{@{$setup->{$_}}}                  # elements in the activated groups
 					grep {exists $activated{$_}}  # only activated groups
 						keys %{$setup} ;      # all the groups
 	
-	print "=> $coumpound_regex\n" ;
+	#~ print "=> $coumpound_regex\n" ;
+	
 	s{
 	^=for\s+                   # a pod =for tag
 	(?:$coumpound_regex)\s+    # tag and at least a space
